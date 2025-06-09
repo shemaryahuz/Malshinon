@@ -6,7 +6,13 @@ using System.Threading.Tasks;
 
 namespace MalshinonApp.Models
 {
-    internal class Reporter
+    internal class Reporter: Person
     {
+        public Reporter(string firstName, string lastName, string secretCode)
+        {
+            this.FirstName = firstName;
+            this.LastName = lastName;
+            this.SecretCode = secretCode;
+        }
     }
 }
