@@ -11,18 +11,18 @@ id INT PRIMARY KEY AUTO_INCREMENT,
 firstName VARCHAR(100),
 lastName VARCHAR(100),
 secretCode VARCHAR(100) UNIQUE,
-type ENUM('reporter', 'target', 'both', 'potential_agent'),
-reportsAmount INT DEFAULT 0,
-mantionsAmount INT DEFAULT 0
+role ENUM('manager', 'reporter', 'target', 'both', 'potential_agent'),
+reportsCount INT DEFAULT 0,
+mantionsCount INT DEFAULT 0
 );
 
 -- Create intel reports table
 CREATE TABLE intel_reports(
 id INT PRIMARY KEY AUTO_INCREMENT,
 reporterId INT,
-FOREIGN KEY(reporterId) REFERENCES people(id),
 targetId INT,
-FOREIGN KEY(targetId) REFERENCES people(id),
 text TEXT,
-timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
+timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
+FOREIGN KEY(reporterId) REFERENCES people(id),
+FOREIGN KEY(targetId) REFERENCES people(id)
 );
