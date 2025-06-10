@@ -1,5 +1,6 @@
 ﻿using MalshinonApp.Data;
 using MalshinonApp.Models;
+using MalshinonApp.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,13 +10,18 @@ using System.Threading.Tasks;
 namespace MalshinonApp.UI
 {
     // This class is responsible for the reporter's menu
-    internal static class ReporterMenu
+    internal class ReporterMenu
     {
-        private static void Welcome(Reporter reporter)
+        private ReportService _service;
+        public ReporterMenu(DatabaseContext database)
+        {
+            _service = new ReportService(database);
+        }
+        private void Welcome(Reporter reporter)
         {
             Console.WriteLine($"Welcome {reporter.FirstName} {reporter.LastName}!");
         }
-        private static string ShowOptions()
+        private string ShowOptions()
         {
             Console.WriteLine(
                 $"Select:\n" +
@@ -23,19 +29,34 @@ namespace MalshinonApp.UI
                 $"0. Exit.");
             return Console.ReadLine();
         }
-        private static void ExecuteQuery()
+        private bool Validate(string choice)
+        {
+            return choice == "1";
+        }
+        private void Report()
         {
 
         }
-        public static void Show(Reporter reporter)
+        public void Show(Reporter reporter)
         {
             Welcome(reporter);
             string exit = "0";
             bool toExit = false;
             while (!toExit)
             {
-                string selection = ShowOptions();
-
+                string choice = ShowOptions();
+                if (choice == exit)
+                {
+                    toExit = true;
+                }
+                else if (Validate(choice))
+                {
+                    Report();
+                }
+                else
+                {
+                    Console.WriteLine("Invalid input");
+                }
             }
         }
     }

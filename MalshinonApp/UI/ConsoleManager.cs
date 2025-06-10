@@ -23,22 +23,23 @@ namespace MalshinonApp.UI
             Console.WriteLine("Welcome to Malshinon!");
 
             // Get inputs to login
-            Console.WriteLine("Enter your First Name: ");
+            Console.WriteLine("Enter your First Name:");
             string firstName = Console.ReadLine();
-            Console.WriteLine("Enter your Last Name: ");
+            Console.WriteLine("Enter your Last Name:");
             string lastName = Console.ReadLine();
-            Console.WriteLine("Enter your Secret Code: ");
+            Console.WriteLine("Enter your Secret Code:");
             string code = Console.ReadLine();
 
             // Setup login service
-            LoginService loginService = new LoginService(dbConnection);
+            LoginService loginService = LoginService.GetLoginService(dbConnection);
 
             // Login or create user
             Person user = loginService.LoginOrCreatePerson(firstName, lastName, code, "reporter");
             // Make user a reporter
             Reporter reporter = new Reporter(user.FirstName, user.LastName, user.SecretCode);
 
-            ReporterMenu reporterMenu = new ReporterMenu(dbConnection);
+            // Setup reporter menu (which creates reporter-service obj that creates report-repository obj that uses db)
+            ReporterMenu reporterMenu = ReporterMenu.GetReporterMenu(dbConnection);
             reporterMenu.Show(reporter);
             // Close connection
             dbConnection.CloseConnection();
