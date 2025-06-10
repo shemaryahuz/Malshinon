@@ -16,5 +16,12 @@ namespace MalshinonApp.Models
         public string Role { get; set; } // "reporter", "manager", etc.
         public int ReportsCount { get; set; }
         public int MantionsCount { get; set; }
+        public Person(string firstName, string lastName, string secretCode, string role)
+        {
+            this.FirstName = firstName;
+            this.LastName = lastName;
+            this.SecretCode = secretCode;
+            this.Role = role;
+        }
     }
 }

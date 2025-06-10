@@ -12,9 +12,9 @@ namespace MalshinonApp.Data
     {
         private string _connectionString;
         private MySqlConnection _connection;
-        public DatabaseContext(string connectionString)
+        public DatabaseContext()
         {
-            _connectionString = connectionString;
+            _connectionString = "server=localhost;username=root;password=;database=malshinon_db";
             _connection = new MySqlConnection(_connectionString);
         }
         public MySqlConnection GetConnection()
