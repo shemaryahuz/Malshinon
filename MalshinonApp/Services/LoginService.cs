@@ -1,4 +1,5 @@
-﻿using MalshinonApp.Models;
+﻿using MalshinonApp.Data;
+using MalshinonApp.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,9 +11,29 @@ namespace MalshinonApp.Services
     // This class is responsible for login to the system as reporter or manager
     internal class LoginService
     {
-        public Reporter Login(string firstName, string lastName, string secretCode)
+        private PersonRepository _personRepo;
+        private static LoginService _instance;
+        private LoginService(DatabaseContext database)
         {
-            return new Reporter(firstName, lastName, secretCode);
+            _personRepo = PersonRepository.GetPersonRepository(database);
+        }
+        public static LoginService GetLoginService(DatabaseContext database)
+        {
+           if (_instance is null)
+           {
+                _instance = new LoginService(database);
+           }
+           return _instance;
+        }
+        public Person LoginOrCreatePerson(string firstName, string lastName, string secretCode, string role)
+        {
+            Person person = _personRepo.GetPersonByCode(secretCode);
+            if (person is null)
+            {
+                person = new Person(firstName, lastName, secretCode, role);
+                _personRepo.AddPerson(person);
+            }
+            return person;
         }
     }
 }
