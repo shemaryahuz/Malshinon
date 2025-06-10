@@ -35,11 +35,11 @@ namespace MalshinonApp.UI
 
             // Login or create user
             Person user = loginService.LoginOrCreatePerson(firstName, lastName, code, "reporter");
-
             // Make user a reporter
-            //Reporter reporter = new Reporter(user.FirstName, user.LastName, user.SecretCode);
+            Reporter reporter = new Reporter(user.FirstName, user.LastName, user.SecretCode);
 
-            //ReporterMenu.Show(reporter);
+            ReporterMenu reporterMenu = new ReporterMenu(dbConnection);
+            reporterMenu.Show(reporter);
             // Close connection
             dbConnection.CloseConnection();
         }

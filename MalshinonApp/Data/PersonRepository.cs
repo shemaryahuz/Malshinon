@@ -20,8 +20,11 @@ namespace MalshinonApp.Data
             Person person = null;
             try
             {
-                string query = $"SELECT * FROM people WHERE secretCode={code}";
+                string query = 
+                    $"SELECT * FROM people " +
+                    $"WHERE secretCode=@secretCode;";
                 using var command = new MySqlCommand(query, _db.GetConnection());
+                command.Parameters.AddWithValue("@secretCode", code);
                 using var reader = command.ExecuteReader();
                 if (reader.Read())
                 {
@@ -49,12 +52,13 @@ namespace MalshinonApp.Data
             try
             {
                 string query = 
-                    "INSERT INTO people(firstName, lastName, secretCode)" +
-                    $"VALUES (@firstName, @lastName, @secretCode)";
+                    "INSERT INTO people (firstName, lastName, secretCode, role) " +
+                    "VALUES (@firstName, @lastName, @secretCode, @role)";
                 using var command = new MySqlCommand(query, _db.GetConnection());
                 command.Parameters.AddWithValue("@firstName", person.FirstName);
                 command.Parameters.AddWithValue("@lastName", person.LastName);
                 command.Parameters.AddWithValue("@secretCode", person.SecretCode);
+                command.Parameters.AddWithValue("@role", person.Role);
                 command.ExecuteNonQuery();
             }
             catch (MySqlException ex)
