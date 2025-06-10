@@ -13,9 +13,18 @@ namespace MalshinonApp.UI
     internal class ReporterMenu
     {
         private ReportService _service;
-        public ReporterMenu(DatabaseContext database)
+        private static ReporterMenu _instanc;
+        private ReporterMenu(DatabaseContext database)
         {
-            _service = new ReportService(database);
+            _service = ReportService.GetReportService(database);
+        }
+        public static ReporterMenu GetReporterMenu(DatabaseContext database)
+        {
+            if (_instanc is null)
+            {
+                _instanc = new ReporterMenu(database);
+            }
+            return _instanc;
         }
         private void Welcome(Reporter reporter)
         {
@@ -33,9 +42,38 @@ namespace MalshinonApp.UI
         {
             return choice == "1";
         }
+        private string[] GetReporterName()
+        {
+            Console.WriteLine("Enter your Full Name (space between first name and last name):");
+            string[] reporterFullName = Console.ReadLine().Split(' ');
+            return reporterFullName;
+        }
+        private string[] GetTargetName()
+        {
+            Console.WriteLine("Enter The target's Full Name (space between first name and last name):");
+            string[] targetFullName = Console.ReadLine().Split(' ');
+            return targetFullName;
+        }
+        private string GetText()
+        {
+            Console.WriteLine("Enter your Report's text:");
+            string text = Console.ReadLine();
+            return text;
+        }
         private void Report()
         {
+            try
+            {
+                string reporterFirstName = GetReporterName()[0];
+                string reporterLastName = GetReporterName()[1];
+                string targetFirstName = GetTargetName()[0];
+                string targetLastName = GetTargetName()[1];
+                string text = GetText();
+            }
+            catch(Exception ex)
+            {
 
+            }
         }
         public void Show(Reporter reporter)
         {
