@@ -8,6 +8,6 @@ namespace MalshinonApp.Models
 {
     internal class Reporter: Person
     {
-        public Reporter(string firstName, string lastName, string secretCode) : base( firstName, lastName, secretCode, "reporter") { }
+        public Reporter(Person person) : base(person.FirstName, person.LastName, person.SecretCode, "reporter") { }
     }
 }

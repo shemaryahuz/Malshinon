@@ -12,13 +12,21 @@ namespace MalshinonApp.Services
     internal class LoginService
     {
         private PersonRepository _personRepo;
-        public LoginService(DatabaseContext database)
+        private static LoginService _instance;
+        private LoginService(DatabaseContext database)
         {
-            _personRepo = new PersonRepository(database);
+            _personRepo = PersonRepository.GetPersonRepository(database);
+        }
+        public static LoginService GetLoginService(DatabaseContext database)
+        {
+           if (_instance is null)
+           {
+                _instance = new LoginService(database);
+           }
+           return _instance;
         }
         public Person LoginOrCreatePerson(string firstName, string lastName, string secretCode, string role)
         {
-            
             Person person = _personRepo.GetPersonByCode(secretCode);
             if (person is null)
             {

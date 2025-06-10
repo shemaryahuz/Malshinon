@@ -18,7 +18,7 @@ namespace MalshinonApp.Data
         {
             _db = database;
         }
-        public ReportRepository GetReportRepository(DatabaseContext database)
+        public static ReportRepository GetReportRepository(DatabaseContext database)
         {
             if (_instance is null)
             {

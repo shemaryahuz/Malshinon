@@ -64,15 +64,22 @@ namespace MalshinonApp.UI
         {
             try
             {
-                string reporterFirstName = GetReporterName()[0];
-                string reporterLastName = GetReporterName()[1];
-                string targetFirstName = GetTargetName()[0];
-                string targetLastName = GetTargetName()[1];
+                // Get Reporter name
+                string[] reporterFullName = GetReporterName();
+                string reporterFirstName = reporterFullName[0];
+                string reporterLastName = reporterFullName[1];
+                // Get Target name
+                string[] targetFullName = GetTargetName();
+                string targetFirstName = targetFullName[0];
+                string targetLastName = targetFullName[1];
+                // Get Report text
                 string text = GetText();
+                _service.Report(reporterFirstName, reporterLastName, targetFirstName, targetLastName, text);
+                Console.WriteLine("Your report was sended successfuly!");
             }
             catch(Exception ex)
             {
-
+                Console.WriteLine(ex.Message);
             }
         }
         public void Show(Reporter reporter)

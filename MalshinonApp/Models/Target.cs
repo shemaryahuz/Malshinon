@@ -8,6 +8,6 @@ namespace MalshinonApp.Models
 {
     internal class Target: Person
     {
-        public Target(string firstName, string lastName, string secretCode) : base(firstName, lastName, secretCode, "target") { }
+        public Target(Person person) : base(person.FirstName, person.LastName, person.SecretCode, "target") { }
     }
 }

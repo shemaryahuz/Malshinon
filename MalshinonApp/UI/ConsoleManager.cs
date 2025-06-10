@@ -36,7 +36,7 @@ namespace MalshinonApp.UI
             // Login or create user
             Person user = loginService.LoginOrCreatePerson(firstName, lastName, code, "reporter");
             // Make user a reporter
-            Reporter reporter = new Reporter(user.FirstName, user.LastName, user.SecretCode);
+            Reporter reporter = new Reporter(user);
 
             // Setup reporter menu (which creates reporter-service obj that creates report-repository obj that uses db)
             ReporterMenu reporterMenu = ReporterMenu.GetReporterMenu(dbConnection);
