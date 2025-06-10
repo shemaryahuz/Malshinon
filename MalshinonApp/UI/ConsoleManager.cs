@@ -18,26 +18,14 @@ namespace MalshinonApp.UI
             // Setup DB connection
             DatabaseContext dbConnection = new DatabaseContext();
             dbConnection.OpenConnection();
-
             // Welcome
             Console.WriteLine("Welcome to Malshinon!");
-
-            // Get inputs to login
-            Console.WriteLine("Enter your First Name:");
-            string firstName = Console.ReadLine();
-            Console.WriteLine("Enter your Last Name:");
-            string lastName = Console.ReadLine();
-            Console.WriteLine("Enter your Secret Code:");
-            string code = Console.ReadLine();
-
-            // Setup login service
-            LoginService loginService = LoginService.GetLoginService(dbConnection);
-
+            // Setup login displayer
+            LoginDisplayer loginDisplayer = LoginDisplayer.GetLoginDisplayer(dbConnection);
             // Login or create user
-            Person user = loginService.LoginOrCreatePerson(firstName, lastName, code, "reporter");
+            Person user = loginDisplayer.Login();
             // Make user a reporter
             Reporter reporter = new Reporter(user);
-
             // Setup reporter menu (which creates reporter-service obj that creates report-repository obj that uses db)
             ReporterMenu reporterMenu = ReporterMenu.GetReporterMenu(dbConnection);
             reporterMenu.Show(reporter);

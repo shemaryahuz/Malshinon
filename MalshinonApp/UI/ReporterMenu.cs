@@ -42,12 +42,6 @@ namespace MalshinonApp.UI
         {
             return choice == "1";
         }
-        private string[] GetReporterName()
-        {
-            Console.WriteLine("Enter your Full Name (space between first name and last name):");
-            string[] reporterFullName = Console.ReadLine().Split(' ');
-            return reporterFullName;
-        }
         private string[] GetTargetName()
         {
             Console.WriteLine("Enter The target's Full Name (space between first name and last name):");
@@ -60,21 +54,17 @@ namespace MalshinonApp.UI
             string text = Console.ReadLine();
             return text;
         }
-        private void Report()
+        private void Report(Reporter reporter)
         {
             try
             {
-                // Get Reporter name
-                string[] reporterFullName = GetReporterName();
-                string reporterFirstName = reporterFullName[0];
-                string reporterLastName = reporterFullName[1];
                 // Get Target name
                 string[] targetFullName = GetTargetName();
                 string targetFirstName = targetFullName[0];
                 string targetLastName = targetFullName[1];
                 // Get Report text
                 string text = GetText();
-                _service.Report(reporterFirstName, reporterLastName, targetFirstName, targetLastName, text);
+                _service.Report(reporter.FirstName, reporter.LastName, targetFirstName, targetLastName, text);
                 Console.WriteLine("Your report was sended successfuly!");
             }
             catch(Exception ex)
@@ -96,7 +86,7 @@ namespace MalshinonApp.UI
                 }
                 else if (Validate(choice))
                 {
-                    Report();
+                    Report(reporter);
                 }
                 else
                 {
