@@ -56,7 +56,7 @@ namespace MalshinonApp.UI
                 string targetLastName = Console.ReadLine().ToLower();
                 // Get Report text
                 string text = GetText();
-                Target target = new Target(new Person(targetFirstName, targetLastName, "0", "target")); // to fix secret code
+                Target target = new Target(new Person(targetFirstName, targetLastName, "8", "target")); // to fix secret code
                 bool submited = _service.Report(reporter, target, text);
                 if (submited)
                 {

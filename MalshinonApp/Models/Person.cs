@@ -9,6 +9,7 @@ namespace MalshinonApp.Models
     // This class represents a person in the malshinon system
     internal class Person
     {
+        public int Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string SecretCode { get; set; }
