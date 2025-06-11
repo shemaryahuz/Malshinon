@@ -30,7 +30,7 @@ FOREIGN KEY(targetId) REFERENCES people(id)
 -- Insert people (1 manager, reporters, targets, and 3 'both' roles)
 INSERT INTO people (firstName, lastName, secretCode, role, reportsCount, mantionsCount) VALUES
 -- Manager
-('David', 'Mitchell', 'ALPHA001', 'manager', 0, 0),
+('Shemaryahu', 'Zalmanov', 'ALPHA001', 'manager', 0, 0),
 
 -- Reporters (including 3 with 10+ reports each)
 ('Sarah', 'Johnson', 'REP001', 'reporter', 15, 0),  -- High-volume reporter 1
