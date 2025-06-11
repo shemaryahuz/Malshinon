@@ -32,7 +32,12 @@ namespace MalshinonApp.UI
             foreach (Person person in people)
             {
                 Console.WriteLine(
-                    $"Person ID: {person.Id}. First name: {person.FirstName}. Last name: {person.LastName}. Secret Cose: {person.SecretCode}.");
+                    $"Person ID: {person.Id}. " +
+                    $"Persone Role: {person.Role}. " +
+                    $"First name: {person.FirstName}. " +
+                    $"Last name: {person.LastName}. " +
+                    $"Secret Code: {person.SecretCode}."
+                    );
             }
         }
         private string ShowOptions()
@@ -41,9 +46,10 @@ namespace MalshinonApp.UI
                 $"Options:\n" +
                 $"1. Show all people.\n" +
                 $"2. Show potential agents\n" +
-                $"3. Show dangerous targets" +
+                $"3. Show dangerous targets\n" +
                 $"4. Exit.\n" +
-                $"Select:");
+                $"Select:"
+                );
             return Console.ReadLine();
         }
         private bool Validate(string choice)
@@ -56,6 +62,7 @@ namespace MalshinonApp.UI
             switch (choice)
             {
                 case "1":
+                    ShowPeople();
                     break;
                 case "2":
                     Console.WriteLine("Not ready yet.");

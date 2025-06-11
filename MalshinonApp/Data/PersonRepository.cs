@@ -25,6 +25,38 @@ namespace MalshinonApp.Data
             }
             return _instance;
         }
+        public List<Person> GetPeople()
+        {
+            List<Person> people = new List<Person>();
+            try
+            {
+                string query =
+                    $"SELECT * FROM people";
+                using var command = new MySqlCommand(query, _db.GetConnection());
+                using var reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    Person person = new Person(
+                            reader.GetString("firstName"),
+                            reader.GetString("lastName"),
+                            reader.GetString("secretCode"),
+                            reader.GetString("role")
+                        );
+                    person.Id = reader.GetInt32("id");
+                    people.Add(person);
+                }
+                return people;
+            }
+            catch (MySqlException ex)
+            {
+                Console.WriteLine($"SQL error: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+            }
+            return people;
+        }
         public Person? GetPersonByCode(string code)
         {
             Person person = null;
@@ -46,6 +78,7 @@ namespace MalshinonApp.Data
                         reader.GetString("role")
                     );
                 }
+                return person;
             }
             catch(MySqlException ex)
             {
@@ -71,6 +104,7 @@ namespace MalshinonApp.Data
                 {
                     person.Id = reader.GetInt32("id");
                 }
+                return person;
             }
             catch (MySqlException ex)
             {

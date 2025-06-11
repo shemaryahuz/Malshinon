@@ -19,7 +19,7 @@ namespace MalshinonApp.Services
         {
             _personRepo = PersonRepository.GetPersonRepository(database);
             IsNew = false;
-            ManagerSecretCode = "manager12345";
+            ManagerSecretCode = "ALPHA001";
         }
         public static LoginService GetLoginService(DatabaseContext database)
         {

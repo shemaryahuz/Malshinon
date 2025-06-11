@@ -32,7 +32,8 @@ namespace MalshinonApp.UI
                 $"Options:\n" +
                 $"1. Submit report.\n" +
                 $"2. Exit.\n" +
-                $"Select:");
+                $"Select:"
+                );
             return Console.ReadLine();
         }
         private bool Validate(string choice)
