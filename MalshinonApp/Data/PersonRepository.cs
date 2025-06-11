@@ -57,9 +57,8 @@ namespace MalshinonApp.Data
             }
             return person;
         }
-        public Person? GetPerson(Person person)
+        public Person? AddIdToPerson(Person person)
         {
-            Person returnedPerson = null;
             try
             {
                 string query =
@@ -70,13 +69,7 @@ namespace MalshinonApp.Data
                 using var reader = command.ExecuteReader();
                 if (reader.Read())
                 {
-                    returnedPerson = new Person
-                    (
-                        reader.GetString("firstName"),
-                        reader.GetString("lastName"),
-                        reader.GetString("secretCode"),
-                        reader.GetString("role")
-                    );
+                    person.Id = reader.GetInt32("id");
                 }
             }
             catch (MySqlException ex)
@@ -87,33 +80,7 @@ namespace MalshinonApp.Data
             {
                 Console.WriteLine($"Error: {ex.Message}");
             }
-            return returnedPerson;
-        }
-        public int GetPersonId(Person person)
-        {
-            int personId = 0;
-            try
-            {
-                string query =
-                    $"SELECT personId FROM people " +
-                    $"WHERE lastName=@lastName;";
-                using var command = new MySqlCommand(query, _db.GetConnection());
-                command.Parameters.AddWithValue("@lastName", person.LastName);
-                using var reader = command.ExecuteReader();
-                if (reader.Read())
-                {
-                    personId = reader.GetInt32("personId");
-                }
-            }
-            catch (MySqlException ex)
-            {
-                Console.WriteLine($"SQL error: {ex.Message}");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error: {ex.Message}");
-            }
-            return personId;
+            return person;
         }
         public void AddPerson(Person person)
         {

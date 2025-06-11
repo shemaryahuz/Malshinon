@@ -27,35 +27,31 @@ namespace MalshinonApp.Services
             }
             return _instance;
         }
-        private Person? GetPerson(Person person)
+        private Person AddIdToPerson(Person person)
         {
-            return _personRepo.GetPerson(person);
+            return _personRepo.AddIdToPerson(person);
         }
-        private int GetPersonId(Person person)
+        private void AddTarget(Target target)
         {
-            return _personRepo.GetPersonId(person);
+            _personRepo.AddPerson(target);
         }
         private Report CreateReport(int reporterId, int targetId, string text)
         {
             Report report = new Report(reporterId, targetId, text);
             return report;
         }
-        public bool Report(Reporter reporter, string targetFirstName, string targetLastName, string text)
+        public bool Report(Reporter reporter, Target target, string text)
         {
             bool added = false;
-            Reporter returendReporter = new Reporter(GetPerson(reporter));
-            //reporter = ;
-            //Target target = new Target(GetPerson(targetLastName));
-            //if (target is null)
-            //{
-            //    target = new Target(new Person(reporterFirstName, reporterLastName, " ", "target")); // to add creation of secret code
-            //    _personRepo.AddPerson(target);
-            //    target = new Target(GetPerson(targetLastName));
-            //}
-            //int reporterId = GetPersonId(reporterLastName);
-            //int targetId = GetPersonId(targetLastName);
-            //Report report = CreateReport(reporterId, targetId, text);
-            //added = _reportRepo.AddReport(report);
+            Person reporterWithId = AddIdToPerson(reporter);
+            Person tergetWithId = AddIdToPerson(target);
+            if (tergetWithId.Id == 0) // means that he dosn't exist in data base
+            {
+                AddTarget(target);
+                tergetWithId = AddIdToPerson(target);
+            }
+            Report report = CreateReport(reporterWithId.Id, tergetWithId.Id, text);
+            added = _reportRepo.AddReport(report);
             return added;
         }
     }
