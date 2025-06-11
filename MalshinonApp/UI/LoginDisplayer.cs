@@ -28,7 +28,7 @@ namespace MalshinonApp.UI
         private void Welcome(Person person)
         {
             Console.WriteLine($"Welcome {person.FirstName} {person.LastName}!");
-            if (_service.IsNew())
+            if (_service.IsNew)
             {
                 Console.WriteLine(
                     $"Your account has been created successfully.\n" +
@@ -44,7 +44,7 @@ namespace MalshinonApp.UI
         }
         public Person Login()
         {
-            string managerCode = "manager1234";
+            string managerCode = _service.ManagerSecretCode;
             Person user = null;
             try
             {

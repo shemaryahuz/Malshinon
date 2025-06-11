@@ -13,11 +13,13 @@ namespace MalshinonApp.Services
     {
         private PersonRepository _personRepo;
         private static LoginService _instance;
-        private bool _isNew;
+        public bool IsNew { get; set; }
+        public string ManagerSecretCode { get; set; }
         private LoginService(DatabaseContext database)
         {
             _personRepo = PersonRepository.GetPersonRepository(database);
-            _isNew = false;
+            IsNew = false;
+            ManagerSecretCode = "manager12345";
         }
         public static LoginService GetLoginService(DatabaseContext database)
         {
@@ -27,10 +29,6 @@ namespace MalshinonApp.Services
            }
            return _instance;
         }
-        public bool IsNew()
-        {
-            return _isNew;
-        }
         public Person LoginOrCreatePerson(string firstName, string lastName, string secretCode, string role)
         {
             Person person = _personRepo.GetPersonByCode(secretCode);
@@ -38,7 +36,7 @@ namespace MalshinonApp.Services
             {
                 person = new Person(firstName, lastName, secretCode, role);
                 _personRepo.AddPerson(person);
-                _isNew = true;
+                IsNew = true;
             }
             return person;
         }

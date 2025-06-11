@@ -31,11 +31,17 @@ namespace MalshinonApp.UI
                 Reporter reporter = new Reporter(user);
                 // Setup reporter menu (which creates reporter-service obj that creates report-repository obj that uses db)
                 ReporterMenu reporterMenu = ReporterMenu.GetReporterMenu(dbConnection);
+                // Show reporter menu
                 reporterMenu.Show(reporter);
             }
             else if (user.Role == "manager")
             {
-                Console.WriteLine("The nanager dashboard is not ready yet.");
+                // Make user a manager
+                Manager manager = new Manager(user);
+                // Setup manager menu
+                ManagerMenu managerMenu = ManagerMenu.GetManagerMenu(dbConnection);
+                // Show manger menu
+                managerMenu.Show();
             }
             // Close connection
             dbConnection.CloseConnection();
