@@ -4,6 +4,7 @@ using MalshinonApp.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -25,6 +26,15 @@ namespace MalshinonApp.UI
             }
             return _instance;
         }
+        private void ShowPeople()
+        {
+            List<Person> people = _service.GetPeople();
+            foreach (Person person in people)
+            {
+                Console.WriteLine(
+                    $"Person ID: {person.Id}. First name: {person.FirstName}. Last name: {person.LastName}. Secret Cose: {person.SecretCode}.");
+            }
+        }
         private string ShowOptions()
         {
             Console.WriteLine(
@@ -41,9 +51,19 @@ namespace MalshinonApp.UI
             string[] validated = { "1", "2", "3" };
             return validated.Contains(choice);
         }
-        private void ExecuteChoice()
+        private void ExecuteChoice(string choice)
         {
-            Console.WriteLine("Not ready yet.");
+            switch (choice)
+            {
+                case "1":
+                    break;
+                case "2":
+                    Console.WriteLine("Not ready yet.");
+                    break;
+                case "3":
+                    Console.WriteLine("Not ready yet.");
+                    break;
+            }
         }
         public void Show()
         {
@@ -58,7 +78,7 @@ namespace MalshinonApp.UI
                 }
                 else if (Validate(choice))
                 {
-                    ExecuteChoice();
+                    ExecuteChoice(choice);
                 }
                 else
                 {
