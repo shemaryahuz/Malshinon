@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MalshinonApp.Models;
 
 namespace MalshinonApp.Services
 {
@@ -25,6 +26,10 @@ namespace MalshinonApp.Services
                 _instance = new ManagerService(database);
             }
             return _instance;
+        }
+        public List<Person> GetPeople()
+        {
+            return _personRepo.GetPeople();
         }
     }
 }
