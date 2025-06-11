@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace MalshinonApp.Models
 {
-    internal class Manager
+    internal class Manager: Person
     {
+        public Manager(Person person) : base(person.FirstName, person.LastName, person.SecretCode, "manager") { }
     }
 }

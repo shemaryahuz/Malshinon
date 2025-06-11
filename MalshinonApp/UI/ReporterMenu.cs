@@ -31,7 +31,7 @@ namespace MalshinonApp.UI
             Console.WriteLine(
                 $"Options:\n" +
                 $"1. Submit report.\n" +
-                $"0. Exit.\n" +
+                $"2. Exit.\n" +
                 $"Select:");
             return Console.ReadLine();
         }
@@ -74,7 +74,7 @@ namespace MalshinonApp.UI
         }
         public void Show(Reporter reporter)
         {
-            string exit = "0";
+            string exit = "2";
             bool toExit = false;
             while (!toExit)
             {
