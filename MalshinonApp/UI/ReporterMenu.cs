@@ -26,55 +26,54 @@ namespace MalshinonApp.UI
             }
             return _instanc;
         }
-        private void Welcome(Reporter reporter)
-        {
-            Console.WriteLine($"Welcome {reporter.FirstName} {reporter.LastName}!");
-        }
         private string ShowOptions()
         {
             Console.WriteLine(
-                $"Select:\n" +
+                $"Options:\n" +
                 $"1. Submit report.\n" +
-                $"0. Exit.");
+                $"0. Exit.\n" +
+                $"Select:");
             return Console.ReadLine();
         }
         private bool Validate(string choice)
         {
             return choice == "1";
         }
-        private string[] GetTargetName()
-        {
-            Console.WriteLine("Enter The target's Full Name (space between first name and last name):");
-            string[] targetFullName = Console.ReadLine().Split(' ');
-            return targetFullName;
-        }
         private string GetText()
         {
-            Console.WriteLine("Enter your Report's text:");
+            Console.WriteLine("Enter your report's text:");
             string text = Console.ReadLine();
             return text;
         }
-        private void Report(Reporter reporter)
+        private void SubmitReport(Reporter reporter)
         {
             try
             {
                 // Get Target name
-                string[] targetFullName = GetTargetName();
-                string targetFirstName = targetFullName[0];
-                string targetLastName = targetFullName[1];
+                Console.WriteLine("Enter target's first name:");
+                string targetFirstName = Console.ReadLine().ToLower();
+                Console.WriteLine("Enter target's last name:");
+                string targetLastName = Console.ReadLine().ToLower();
                 // Get Report text
                 string text = GetText();
-                _service.Report(reporter.FirstName, reporter.LastName, targetFirstName, targetLastName, text);
-                Console.WriteLine("Your report was sended successfuly!");
+                Target target = new Target(new Person(targetFirstName, targetLastName, "0", "target")); // to fix secret code
+                bool submited = _service.Report(reporter, target, text);
+                if (submited)
+                {
+                    Console.WriteLine("Your report was sended successfuly!");
+                }
+                else
+                {
+                    Console.WriteLine("Somthing went wrong.");
+                }
             }
             catch(Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Console.WriteLine(ex);
             }
         }
         public void Show(Reporter reporter)
         {
-            Welcome(reporter);
             string exit = "0";
             bool toExit = false;
             while (!toExit)
@@ -86,7 +85,7 @@ namespace MalshinonApp.UI
                 }
                 else if (Validate(choice))
                 {
-                    Report(reporter);
+                    SubmitReport(reporter);
                 }
                 else
                 {

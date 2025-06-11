@@ -27,37 +27,36 @@ namespace MalshinonApp.Services
             }
             return _instance;
         }
-        private Person? GetPerson(string LastName)
+        private Person? GetPerson(Person person)
         {
-            return _personRepo.GetPersonByLastName(LastName);
+            return _personRepo.GetPerson(person);
         }
-        private int GetPersonId(string LastName)
+        private int GetPersonId(Person person)
         {
-            return _personRepo.GetPersonIdByLastName(LastName);
+            return _personRepo.GetPersonId(person);
         }
         private Report CreateReport(int reporterId, int targetId, string text)
         {
             Report report = new Report(reporterId, targetId, text);
             return report;
         }
-        private void AddReport(Report report)
+        public bool Report(Reporter reporter, string targetFirstName, string targetLastName, string text)
         {
-            _reportRepo.AddReport(report);
-        }
-        public void Report(string reporterFirstName, string reporterLastName, string targetFirstName, string targetLastName, string text)
-        {
-            Reporter reporter = new Reporter(GetPerson(reporterLastName));
-            Target target = new Target(GetPerson(targetLastName));
-            if (target is null)
-            {
-                target = new Target(new Person(reporterFirstName, reporterLastName, "", "target")); // to add creation of secret code
-                _personRepo.AddPerson(target);
-                target = new Target(GetPerson(targetLastName));
-            }
-            int reporterId = GetPersonId(reporterLastName);
-            int targetId = GetPersonId(targetLastName);
-            Report report = CreateReport(reporterId, targetId, text);
-            AddReport(report);
+            bool added = false;
+            Reporter returendReporter = new Reporter(GetPerson(reporter));
+            //reporter = ;
+            //Target target = new Target(GetPerson(targetLastName));
+            //if (target is null)
+            //{
+            //    target = new Target(new Person(reporterFirstName, reporterLastName, " ", "target")); // to add creation of secret code
+            //    _personRepo.AddPerson(target);
+            //    target = new Target(GetPerson(targetLastName));
+            //}
+            //int reporterId = GetPersonId(reporterLastName);
+            //int targetId = GetPersonId(targetLastName);
+            //Report report = CreateReport(reporterId, targetId, text);
+            //added = _reportRepo.AddReport(report);
+            return added;
         }
     }
 }

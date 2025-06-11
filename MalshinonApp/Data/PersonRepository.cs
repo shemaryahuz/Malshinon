@@ -57,20 +57,20 @@ namespace MalshinonApp.Data
             }
             return person;
         }
-        public Person? GetPersonByLastName(string lastName)
+        public Person? GetPerson(Person person)
         {
-            Person person = null;
+            Person returnedPerson = null;
             try
             {
                 string query =
                     $"SELECT * FROM people " +
                     $"WHERE lastName=@lastName;";
                 using var command = new MySqlCommand(query, _db.GetConnection());
-                command.Parameters.AddWithValue("@lastName", lastName);
+                command.Parameters.AddWithValue("@lastName", person.LastName);
                 using var reader = command.ExecuteReader();
                 if (reader.Read())
                 {
-                    person = new Person
+                    returnedPerson = new Person
                     (
                         reader.GetString("firstName"),
                         reader.GetString("lastName"),
@@ -87,9 +87,9 @@ namespace MalshinonApp.Data
             {
                 Console.WriteLine($"Error: {ex.Message}");
             }
-            return person;
+            return returnedPerson;
         }
-        public int GetPersonIdByLastName(string lastName)
+        public int GetPersonId(Person person)
         {
             int personId = 0;
             try
@@ -98,7 +98,7 @@ namespace MalshinonApp.Data
                     $"SELECT personId FROM people " +
                     $"WHERE lastName=@lastName;";
                 using var command = new MySqlCommand(query, _db.GetConnection());
-                command.Parameters.AddWithValue("@lastName", lastName);
+                command.Parameters.AddWithValue("@lastName", person.LastName);
                 using var reader = command.ExecuteReader();
                 if (reader.Read())
                 {

@@ -26,8 +26,9 @@ namespace MalshinonApp.Data
             }
             return _instance;
         }
-        public void AddReport(Report report)
+        public bool AddReport(Report report)
         {
+            bool added = false;
             try
             {
                 string query =
@@ -38,6 +39,7 @@ namespace MalshinonApp.Data
                 command.Parameters.AddWithValue("@targetId", report.TargetId);
                 command.Parameters.AddWithValue("@text", report.Text);
                 command.ExecuteNonQuery();
+                added = true;
             }
             catch(MySqlException ex)
             {
@@ -47,6 +49,7 @@ namespace MalshinonApp.Data
             {
                 Console.WriteLine(ex.Message);
             }
+            return added;
         }
         public Report? GetReportById()
         {
