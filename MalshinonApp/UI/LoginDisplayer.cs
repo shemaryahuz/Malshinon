@@ -25,19 +25,45 @@ namespace MalshinonApp.UI
             }
             return _instance;
         }
+        private void Welcome(Person person)
+        {
+            Console.WriteLine($"Welcome {person.FirstName} {person.LastName}!");
+            if (_service.IsNew())
+            {
+                Console.WriteLine(
+                    $"Your account has been created successfully.\n" +
+                    $"You are a {person.Role} in the Malshinon system.\n" +
+                    $"Your Secret code is {person.SecretCode}");
+            }
+            else
+            {
+                Console.WriteLine(
+                    $"You have successfuly lpgged in.\n" +
+                    $"You are a {person.Role} in the Malshinon system.");
+            }
+        }
         public Person Login()
         {
+            string managerCode = "manager1234";
             Person user = null;
             try
             {
                 // Get inputs to login
-                Console.WriteLine("Enter your First Name:");
-                string firstName = Console.ReadLine();
-                Console.WriteLine("Enter your Last Name:");
-                string lastName = Console.ReadLine();
-                Console.WriteLine("Enter your Secret Code:");
+                Console.WriteLine("Enter your first name:");
+                string firstName = Console.ReadLine().ToLower();
+                Console.WriteLine("Enter your last name:");
+                string lastName = Console.ReadLine().ToLower();
+                Console.WriteLine("Enter your secret code:");
                 string code = Console.ReadLine();
-                user = _service.LoginOrCreatePerson(firstName, lastName, code, "reporter");
+                if (code == managerCode)
+                {
+                    user = _service.LoginOrCreatePerson(firstName, lastName, code, "manager");
+                }
+                else
+                {
+                    user = _service.LoginOrCreatePerson(firstName, lastName, code, "reporter");
+                }   
+                Welcome(user);
             }
             catch(Exception ex)
             {
