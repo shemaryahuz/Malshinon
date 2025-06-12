@@ -80,7 +80,7 @@ namespace MalshinonApp.UI
                 }
                 // Check if user exists
                 user = _service.CheckIfExists(firstName, lastName);
-                // if he dosn't exists create and show secret code
+                // if he doesn't exists create and show secret code
                 if (user is null)
                 {
                     user = _service.CreateUser(firstName, lastName);

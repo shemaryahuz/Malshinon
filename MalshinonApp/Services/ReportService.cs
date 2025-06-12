@@ -45,7 +45,7 @@ namespace MalshinonApp.Services
             bool added = false;
             Person reporterWithId = AddIdToPerson(reporter);
             Person tergetWithId = AddIdToPerson(target);
-            if (tergetWithId.Id == 0) // means that he dosn't exist in data base
+            if (tergetWithId.Id == 0) // means that he doesn't exist in database
             {
                 AddTarget(target);
                 tergetWithId = AddIdToPerson(target);

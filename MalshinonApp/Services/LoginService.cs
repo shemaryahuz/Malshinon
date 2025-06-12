@@ -13,7 +13,6 @@ namespace MalshinonApp.Services
     {
         private PersonRepository _personRepo;
         private static LoginService _instance;
-        public bool IsExist { get; set; }
         public string ManagerSecretCode { get; set; }
         private LoginService(DatabaseContext database)
         {
@@ -34,26 +33,38 @@ namespace MalshinonApp.Services
         }
         private string GenerateCode()
         {
-            return "";
+            Random random = new Random();
+            StringBuilder code = new StringBuilder();
+            for (int i = 0; i < 4; i++)
+            {
+                char letter = (char)random.Next('A', 'Z' + 1);
+                code.Append(letter);
+            }
+            for (int i = 0; i < 4; i++)
+            {
+                int number = random.Next(0, 10);
+                code.Append(number);
+            }
+            return code.ToString();
+        }
+        public string GetNewCode()
+        {
+            string generatedCode = GenerateCode();
+            // Check if code already exists
+            bool isExists = _personRepo.CodeIsExists(generatedCode);
+            while (isExists)
+            {
+                generatedCode = GenerateCode();
+            }
+            return generatedCode;
         }
         public Person CreateUser(string firstName, string lastName)
         {
-            string code = GenerateCode();
+            string code = GetNewCode();
             string role = "reporter";
             Person user = new Person(firstName, lastName, code, role);
             _personRepo.AddPerson(user);
             return user;
-        }
-        public Person LoginOrCreatePerson(string firstName, string lastName, string secretCode, string role)
-        {
-            Person person = _personRepo.GetPersonByCode(secretCode);
-            if (person is null)
-            {
-                person = new Person(firstName, lastName, secretCode, role);
-                _personRepo.AddPerson(person);
-                IsExist = false;
-            }
-            return person;
         }
     }
 }

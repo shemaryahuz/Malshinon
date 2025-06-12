@@ -18,7 +18,7 @@ namespace MalshinonApp.UI
         private ManagerMenu(DatabaseContext database)
         {
             _service = ManagerService.GetManagerService(database);
-            _exit = "5";
+            _exit = "0";
         } 
         public static ManagerMenu GetManagerMenu(DatabaseContext database)
         {
@@ -39,6 +39,20 @@ namespace MalshinonApp.UI
                     $"First name: {person.FirstName}. " +
                     $"Last name: {person.LastName}. " +
                     $"Secret Code: {person.SecretCode}."
+                    );
+            }
+        }
+        private void ShowReports()
+        {
+            List<Report> reports = _service.GetReports();
+            foreach (Report report in reports)
+            {
+                Console.WriteLine(
+                    $"Reporter ID: {report.ReporterId}. " +
+                    $"Target ID: {report.TargetId}.\n" +
+                    $"Text:\n" +
+                    $"{report.Text}" +
+                    $"Time: {report.Time}"
                     );
             }
         }
@@ -68,7 +82,7 @@ namespace MalshinonApp.UI
                     ShowPeople();
                     break;
                 case "2":
-                    Console.WriteLine("All reports not ready yet.");
+                    ShowReports();
                     break;
                 case "3":
                     Console.WriteLine("Potential agents not ready yet.");

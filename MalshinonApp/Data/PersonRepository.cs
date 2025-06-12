@@ -1,10 +1,11 @@
-﻿using System;
+﻿using Google.Protobuf.Compiler;
+using MalshinonApp.Models;
+using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using MalshinonApp.Models;
-using MySql.Data.MySqlClient;
 
 namespace MalshinonApp.Data
 {
@@ -172,6 +173,32 @@ namespace MalshinonApp.Data
             {
                 Console.WriteLine($"Error: {ex.Message}");
             }
+        }
+        public bool CodeIsExists(string code)
+        {
+            bool isExists = false;
+            try
+            {
+                string query =
+                    $"SELECT secretCode FROM people " +
+                    $"WHERE secretCode=@secretCode;";
+                using var command = new MySqlCommand(query, _db.GetConnection());
+                command.Parameters.AddWithValue("@secretCode", code);
+                using var reader = command.ExecuteReader();
+                if (reader.Read())
+                {
+                    isExists = true;
+                }
+            }
+            catch (MySqlException ex)
+            {
+                Console.WriteLine($"SQL error: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+            }
+            return isExists;
         }
     }
 }
