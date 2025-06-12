@@ -63,8 +63,25 @@ namespace MalshinonApp.UI
             List<Person> potentialAgents = _service.GetPotentialAgents();
             Console.WriteLine(
                 "Those are the potential agents:\n" +
-                "(People that reported more than 10 reports with text length of more than 100 characters).");
+                "(People who reported more than 10 reports with text length of more than 100 characters).");
             foreach (Person person in potentialAgents)
+            {
+                Console.WriteLine(
+                    $"Person ID: {person.Id}. " +
+                    $"Person Role: {person.Role}. " +
+                    $"First name: {person.FirstName}. " +
+                    $"Last name: {person.LastName}. " +
+                    $"Secret Code: {person.SecretCode}."
+                    );
+            }
+        }
+        private void ShowDangerousTargets()
+        {
+            List<Person> dangerousTargets = _service.GetDangerousTargets();
+            Console.WriteLine(
+                "Those are the dangerous targets:\n" +
+                "(People who have more than 20 reports about them).");
+            foreach (Person person in dangerousTargets)
             {
                 Console.WriteLine(
                     $"Person ID: {person.Id}. " +
@@ -82,8 +99,8 @@ namespace MalshinonApp.UI
                 $"0. Exit.\n" +
                 $"1. Show all people.\n" +
                 $"2. Show all reports.\n" +
-                $"3. Show potential agents (reporters or both - reporter and target, that reported more than 10 reports with average of 100 characters).\n" +
-                $"4. Show dangerous targets (targets or both - reporter and target, that have more than 20 reports about them.\n" +
+                $"3. Show potential agents (reporters or both - reporter and target, who reported more than 10 reports with average of 100 characters).\n" +
+                $"4. Show dangerous targets (targets or both - reporter and target, who have more than 20 reports about them.\n" +
                 $"Select:"
                 );
             return Console.ReadLine();
@@ -107,7 +124,7 @@ namespace MalshinonApp.UI
                     ShowPotentialAgents();
                     break;
                 case "4":
-                    Console.WriteLine("Dangerous targets not ready yet.");
+                    ShowDangerousTargets();
                     break;
             }
         }

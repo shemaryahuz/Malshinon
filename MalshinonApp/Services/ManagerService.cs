@@ -39,5 +39,9 @@ namespace MalshinonApp.Services
         {
             return _personRepo.GetPotentialAgents();
         }
+        public List<Person> GetDangerousTargets()
+        {
+            return _personRepo.GetDangerousTargets();
+        }
     }
 }

@@ -20,7 +20,7 @@ namespace MalshinonApp.Data
         }
         public static PersonRepository GetPersonRepository(DatabaseContext database)
         {
-            if(_instance is null)
+            if (_instance is null)
             {
                 _instance = new PersonRepository(database);
             }
@@ -97,7 +97,7 @@ namespace MalshinonApp.Data
             Person person = null;
             try
             {
-                string query = 
+                string query =
                     $"SELECT * FROM people " +
                     $"WHERE secretCode=@secretCode;";
                 using var command = new MySqlCommand(query, _db.GetConnection());
@@ -115,11 +115,11 @@ namespace MalshinonApp.Data
                 }
                 return person;
             }
-            catch(MySqlException ex)
+            catch (MySqlException ex)
             {
                 Console.WriteLine($"SQL error: {ex.Message}");
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine($"Error: {ex.Message}");
             }
@@ -155,7 +155,7 @@ namespace MalshinonApp.Data
         {
             try
             {
-                string query = 
+                string query =
                     "INSERT INTO people (firstName, lastName, secretCode, role) " +
                     "VALUES (@firstName, @lastName, @secretCode, @role)";
                 using var command = new MySqlCommand(query, _db.GetConnection());
@@ -200,7 +200,7 @@ namespace MalshinonApp.Data
             }
             return isExists;
         }
-        public List <Person> GetPotentialAgents()
+        public List<Person> GetPotentialAgents()
         {
             List<Person> potentialAgents = new List<Person>();
             try
@@ -239,6 +239,39 @@ namespace MalshinonApp.Data
                 Console.WriteLine($"Error: {ex.Message}");
             }
             return potentialAgents;
+        }
+        public List<Person> GetDangerousTargets()
+        {
+            List<Person> dangerousTargets = new List<Person>();
+            try
+            {
+                string query =
+                    $"SELECT * FROM people " +
+                    $"WHERE mantionsCount > 20";
+                using var command = new MySqlCommand(query, _db.GetConnection());
+                using var reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    Person person = new Person(
+                            reader.GetString("firstName"),
+                            reader.GetString("lastName"),
+                            reader.GetString("secretCode"),
+                            reader.GetString("role")
+                        );
+                    person.Id = reader.GetInt32("id");
+                    dangerousTargets.Add(person);
+                }
+                return dangerousTargets;
+            }
+            catch (MySqlException ex)
+            {
+                Console.WriteLine($"SQL error: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+            }
+            return dangerousTargets;
         }
     }
 }
