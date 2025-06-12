@@ -19,7 +19,7 @@ namespace MalshinonApp.UI
         private ReporterMenu(DatabaseContext database)
         {
             _reportService = ReportService.GetReportService(database);
-            _loginService = LoginService.GetLoginService();
+            _loginService = LoginService.GetLoginService(database);
             _exit = "0";
         }
         public static ReporterMenu GetReporterMenu(DatabaseContext database)

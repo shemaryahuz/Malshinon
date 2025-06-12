@@ -31,6 +31,7 @@ namespace MalshinonApp.UI
         private void ShowPeople()
         {
             List<Person> people = _service.GetPeople();
+            Console.WriteLine("This is the information about all the people:");
             foreach (Person person in people)
             {
                 Console.WriteLine(
@@ -45,6 +46,7 @@ namespace MalshinonApp.UI
         private void ShowReports()
         {
             List<Report> reports = _service.GetReports();
+            Console.WriteLine("This is the information about all the intel reports:");
             foreach (Report report in reports)
             {
                 Console.WriteLine(
@@ -53,6 +55,23 @@ namespace MalshinonApp.UI
                     $"Text:\n" +
                     $"{report.Text}" +
                     $"Time: {report.Time}"
+                    );
+            }
+        }
+        private void ShowPotentialAgents()
+        {
+            List<Person> potentialAgents = _service.GetPotentialAgents();
+            Console.WriteLine(
+                "Those are the potential agents:\n" +
+                "(People that reported more than 10 reports with text length of more than 100 characters).");
+            foreach (Person person in potentialAgents)
+            {
+                Console.WriteLine(
+                    $"Person ID: {person.Id}. " +
+                    $"Person Role: {person.Role}. " +
+                    $"First name: {person.FirstName}. " +
+                    $"Last name: {person.LastName}. " +
+                    $"Secret Code: {person.SecretCode}."
                     );
             }
         }
@@ -85,7 +104,7 @@ namespace MalshinonApp.UI
                     ShowReports();
                     break;
                 case "3":
-                    Console.WriteLine("Potential agents not ready yet.");
+                    ShowPotentialAgents();
                     break;
                 case "4":
                     Console.WriteLine("Dangerous targets not ready yet.");
