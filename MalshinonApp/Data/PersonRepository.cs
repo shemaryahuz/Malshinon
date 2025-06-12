@@ -200,5 +200,45 @@ namespace MalshinonApp.Data
             }
             return isExists;
         }
+        public List <Person> GetPotentialAgents()
+        {
+            List<Person> potentialAgents = new List<Person>();
+            try
+            {
+                string query =
+                    $"SELECT p.*  " +
+                    $"FROM people p " +
+                    $"INNER JOIN (" +
+                    $"SELECT reporterId " +
+                    $"FROM intel_reports " +
+                    $"GROUP BY reporterId " +
+                    $"HAVING COUNT(*) > 10 " +
+                    $"AND AVG(LENGTH(text)) > 100 " +
+                    $") r ON p.id = reporterId";
+                using var command = new MySqlCommand(query, _db.GetConnection());
+                using var reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    Person person = new Person(
+                            reader.GetString("firstName"),
+                            reader.GetString("lastName"),
+                            reader.GetString("secretCode"),
+                            reader.GetString("role")
+                        );
+                    person.Id = reader.GetInt32("id");
+                    potentialAgents.Add(person);
+                }
+                return potentialAgents;
+            }
+            catch (MySqlException ex)
+            {
+                Console.WriteLine($"SQL error: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+            }
+            return potentialAgents;
+        }
     }
 }
