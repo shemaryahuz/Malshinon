@@ -8,7 +8,7 @@ namespace MalshinonApp.Models
 {
     internal class Reporter: Person
     {
-        public int ReportsAccount;
+        public int ReportsCount;
         public Reporter(Person person) : base(person.FirstName, person.LastName, person.SecretCode, "reporter") { }
     }
 }

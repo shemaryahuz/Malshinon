@@ -13,11 +13,13 @@ namespace MalshinonApp.UI
     internal class ReporterMenu
     {
         private ReportService _reportService;
+        private LoginService _loginService;
         private static ReporterMenu _instanc;
         private string _exit;
         private ReporterMenu(DatabaseContext database)
         {
             _reportService = ReportService.GetReportService(database);
+            _loginService = LoginService.GetLoginService();
             _exit = "0";
         }
         public static ReporterMenu GetReporterMenu(DatabaseContext database)
@@ -42,12 +44,6 @@ namespace MalshinonApp.UI
         {
             return choice == "1";
         }
-        private string GetText()
-        {
-            Console.WriteLine("Enter your report's text:");
-            string text = Console.ReadLine();
-            return text;
-        }
         private void SubmitReport(Reporter reporter)
         {
             try
@@ -58,8 +54,20 @@ namespace MalshinonApp.UI
                 Console.WriteLine("Enter target's last name:");
                 string targetLastName = Console.ReadLine();
                 // Get Report text
-                string text = GetText();
-                Target target = new Target(new Person(targetFirstName, targetLastName, " " , "target")); // to fix secret code
+                Console.WriteLine("Enter your report's text:");
+                string text = Console.ReadLine();
+                // Check if exists
+                Person? person = _loginService.CheckIfExists(targetFirstName, targetLastName);
+                if (person is null)
+                {
+                    person = new Person(targetFirstName, targetLastName, _loginService.GetNewCode(), "target");
+                }
+                else if (person.Role == "reporter")
+                {
+                    person.Role = "both";
+                }
+                // Create target
+                Target target = new Target(person); // to fix secret code
                 bool submited = _reportService.Report(reporter, target, text);
                 if (submited)
                 {
