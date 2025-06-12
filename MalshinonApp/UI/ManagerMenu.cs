@@ -33,7 +33,7 @@ namespace MalshinonApp.UI
             {
                 Console.WriteLine(
                     $"Person ID: {person.Id}. " +
-                    $"Persone Role: {person.Role}. " +
+                    $"Person Role: {person.Role}. " +
                     $"First name: {person.FirstName}. " +
                     $"Last name: {person.LastName}. " +
                     $"Secret Code: {person.SecretCode}."

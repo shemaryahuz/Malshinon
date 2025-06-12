@@ -57,6 +57,40 @@ namespace MalshinonApp.Data
             }
             return people;
         }
+        public Person? GetPersonByName(string firstName, string lastName)
+        {
+            Person person = null;
+            try
+            {
+                string query =
+                    $"SELECT * FROM people " +
+                    $"WHERE firstName=@firstName AND lastName=@lastName;";
+                using var command = new MySqlCommand(query, _db.GetConnection());
+                command.Parameters.AddWithValue("@firstName", firstName);
+                command.Parameters.AddWithValue("@lastName", lastName);
+                using var reader = command.ExecuteReader();
+                if (reader.Read())
+                {
+                    person = new Person
+                    (
+                        reader.GetString("firstName"),
+                        reader.GetString("lastName"),
+                        reader.GetString("secretCode"),
+                        reader.GetString("role")
+                    );
+                }
+                return person;
+            }
+            catch (MySqlException ex)
+            {
+                Console.WriteLine($"SQL error: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+            }
+            return person;
+        }
         public Person? GetPersonByCode(string code)
         {
             Person person = null;

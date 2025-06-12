@@ -23,25 +23,29 @@ namespace MalshinonApp.UI
             // Setup login displayer
             LoginDisplayer loginDisplayer = LoginDisplayer.GetLoginDisplayer(dbConnection);
             // Login or create user
-            Person user = loginDisplayer.Login();
-            // Check what is the user's role
-            if (user.Role == "reporter")
+            Person? user = loginDisplayer.LoginOrCreateUser();
+            // Check if didn't logged in
+            if (user != null)
             {
-                // Make user a reporter
-                Reporter reporter = new Reporter(user);
-                // Setup reporter menu (which creates reporter-service obj that creates report-repository obj that uses db)
-                ReporterMenu reporterMenu = ReporterMenu.GetReporterMenu(dbConnection);
-                // Show reporter menu
-                reporterMenu.Show(reporter);
-            }
-            else if (user.Role == "manager")
-            {
-                // Make user a manager
-                Manager manager = new Manager(user);
-                // Setup manager menu
-                ManagerMenu managerMenu = ManagerMenu.GetManagerMenu(dbConnection);
-                // Show manger menu
-                managerMenu.Show();
+                // Check what is the user's role
+                if (user.Role == "reporter" || user.Role == "both")
+                {
+                    // Make user a reporter
+                    Reporter reporter = new Reporter(user);
+                    // Setup reporter menu (which creates reporter-service obj that creates report-repository obj that uses db)
+                    ReporterMenu reporterMenu = ReporterMenu.GetReporterMenu(dbConnection);
+                    // Show reporter menu
+                    reporterMenu.Show(reporter);
+                }
+                else if (user.Role == "manager")
+                {
+                    // Make user a manager
+                    Manager manager = new Manager(user);
+                    // Setup manager menu
+                    ManagerMenu managerMenu = ManagerMenu.GetManagerMenu(dbConnection);
+                    // Show manger menu
+                    managerMenu.Show();
+                }
             }
             // Close connection
             dbConnection.CloseConnection();
