@@ -6,75 +6,13 @@
 
 ## Overview
 
-**Malshinon** is a Community Intel Reporting System designed for hostile environments or organizations, where a community of *enemies* is tracked with the help of *reporters* and *targets*.  
-Reporters submit intelligence about potential threats, dangerous targets, and possible agent candidates.  
-Managers can analyze reports to identify dangerous targets and spot potential agents among reporters or targets.
-
----
-
-## Program Flow Explanation
-
-The Malshinon system follows a structured flow that handles user authentication, role-based access, and intelligence operations:
-
-### 1. Application Initialization
-- **Start Application**: The system begins by initializing the console interface and establishing database connections
-- **Display Login Screen**: Users are presented with a login interface to enter their credentials
-
-### 2. Authentication Process
-- **User Enters Credentials**: Users input their username and password
-- **Validate Credentials**: The LoginService communicates with the Business Logic layer to verify user credentials against the database
-- **Login Successful?**: The system checks if authentication was successful
-  - **No**: Returns to the login screen for retry
-  - **Yes**: Proceeds to role determination
-
-### 3. Role-Based Access Control
-- **Check User Role**: After successful authentication, the system determines the user's role (Reporter or Manager)
-
-### 4. Reporter Workflow
-If the user is identified as a **Reporter**:
-- **Display Reporter Menu**: Shows reporter-specific options and interface
-- **Reporter Actions**: Reporters can perform the following operations:
-  - **Submit Report**: Create and submit intelligence reports about targets
-  - **Fetches User Data**: Access personal information and submission history
-
-### 5. Manager Workflow
-If the user is identified as a **Manager**:
-- **Display Manager Menu**: Shows manager-specific options and administrative interface
-- **Manager Actions**: Managers can perform the following operations:
-  - **Analyze Reports**: Review and analyze submitted intelligence reports
-  - **Submit Report**: Create reports (managers can also act as reporters)
-
-### 6. Data Processing Layer
-- **Business Logic (Services)**: Handles core application logic including:
-  - **LoginService**: Manages authentication and session handling
-  - **ReportService**: Processes report submissions and retrievals
-  - **ManagerService**: Handles manager-specific operations and analytics
-
-### 7. Data Access Layer
-- **Data Access Layer**: Manages database operations through:
-  - **ReportRepository**: Handles CRUD operations for intelligence reports
-  - **PersonRepository**: Manages user data and role assignments
-
-### 8. Database Operations
-- **Database**: The underlying SQL database that:
-  - **Saves Report**: Stores submitted intelligence reports
-  - **Fetches Data**: Retrieves user information, reports, and analytics data
-
-### 9. Session Management
-- **Logout**: Users can terminate their session, returning to the login screen for new authentication
-
-### Key Flow Features:
-- **Role Segregation**: Different user types (Reporter/Manager) have access to different functionalities
-- **Secure Authentication**: All operations require valid credentials
-- **Data Persistence**: All intelligence reports and user data are stored in the database
-- **Bidirectional Data Flow**: Information flows both ways between the UI and database layers
-- **Service-Oriented Architecture**: Business logic is separated into dedicated service classes
+**Malshinon** is a Community Intel Reporting System for gathering and analyzing reports about potential threats within an organization. The system supports managers (who can review and analyze data), reporters (who can submit reports), and targets (who may also act as reporters).
 
 ---
 
 ## Folder Structure
 
-```plaintext
+```
 Malshinon/
 ├── .gitignore
 ├── MalshinonApp/
@@ -106,49 +44,129 @@ Malshinon/
 
 ---
 
-## Program Architecture & Flow
+## Architecture Explanation
 
-> **Program Flow Diagram**  
-> ![Program Flow Diagram](./Docs/program-flow.png)  
+### a. Malshinon Database
 
-The application follows a layered architecture pattern:
-- **Presentation Layer**: Console-based UI components for user interaction
-- **Business Logic Layer**: Service classes that handle core application logic
-- **Data Access Layer**: Repository pattern for database operations
-- **Database Layer**: SQL database for persistent data storage
+- **Setup:**  
+  The database is created with the SQL script `MalshinonDB/malshinon_db.sql`. You need a local SQL environment (install if needed).
+- **Database:**  
+  The database is called `malshinon_db` and is initialized with sample data for testing the app.
+- **Tables:**  
+  - `people`: Stores all users (managers, reporters, targets).
+  - `intel_reports`: Stores reports with columns: `reporterId`, `targetId`, `text`, and `time`.
 
 ---
 
-## Database
+### b. Malshinon Application Layers
 
-- **Setup:**  
-  - The database is initialized using the SQL script (`MalshinonDB/malshinon_db.sql`).
-  - Requires a local SQL environment.
-- **Tables:**
-  - `people`: Contains all users (managers, reporters, targets).
-  - `intel_reports`: Stores intelligence reports (`reporterId`, `targetId`, `text`, `time`).
-- **Initialization:**  
-  - The database comes with sample data for testing.
+- **Layer 1: Data**
+  - Handles the database connection and access to the repositories for `people` and `reports`.
+  - Includes: `DatabaseContext`, `PersonRepository`, `ReportRepository`.
+- **Layer 2: Services**
+  - Handles business logic and features for login, manager operations, and reporter operations.
+  - Includes: `LoginService`, `ManagerService`, `ReportService`.
+- **Layer 3: UI**
+  - Manages user interaction via the console, including login, menus, and navigation.
+  - Includes: `ConsoleManager`, `LoginDisplayer`, `ManagerMenu`, `ReporterMenu`.
+- **Models Folder**
+  - Contains the main classes used throughout the program:
+    - `Person` (base class), `Manager`, `Reporter`, `Target` (all inherit from `Person`)
+    - `Report`
+
+---
+
+## Program Flow
+
+```
+1. Startup:
+   - Welcome message is displayed.
+   - Database connection is opened (via DatabaseContext).
+
+2. Login:
+   - User is prompted for their full name (LoginDisplayer).
+   - If user is new, a code is generated. If user chooses exit, program ends.
+
+3. Menu Selection:
+   - If user is a Manager: Manager menu is displayed with options to view/analyze data.
+   - If user is a Reporter or Reporter & Target: Reporter menu is displayed with option to submit a report.
+
+4. Reporting:
+   - Reporter enters target's full name and report text.
+   - Report is saved in the database.
+
+5. Shutdown:
+   - Database connection is closed.
+   - Exit message is displayed.
+```
+
+### Program Flow (ASCII Diagram)
+
+```
++-------------------+
+|  Welcome Message  |
++-------------------+
+          |
+          v
++-------------------+
+| Open DB Connection|
++-------------------+
+          |
+          v
++-------------------+
+|   Login Prompt    |
++-------------------+
+          |
+   +------|------+
+   |             |
+   v             v
+Manager      Reporter
+  |             |
+  v             v
+Manager     Reporter
+Menu        Menu
+  |             |
+  |      +------+
+  |      |
+  v      v
+[Data Review] [Submit Report]
+          |
+          v
++-------------------+
+|  Save to DB       |
++-------------------+
+          |
+          v
++-------------------+
+| Close Connection  |
++-------------------+
+          |
+          v
++-------------------+
+|   Exit Message    |
++-------------------+
+```
+
+---
+
+## Getting Started
+
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/shemaryahuz/Malshinon.git
+   cd Malshinon
+   ```
+
+2. **Set up the Database:**
+   - Install an SQL environment if needed.
+   - Run `MalshinonDB/malshinon_db.sql` to create the `malshinon_db` with sample data.
+
+3. **Build and Run the Application:**
+   - Open the solution in Visual Studio or another C# IDE.
+   - Build and run the application from the `MalshinonApp` folder.
 
 ---
 
 ## Author
 
 [Shemaryahu Zalmanov](https://github.com/shemaryahuz)
-
----
-
-## Getting Started
-
-1. **Clone the repository**  
-   ```bash
-   git clone https://github.com/shemaryahuz/Malshinon.git
-   cd Malshinon
-   ```
-2. **Set up the Database**  
-   - Install a SQL environment if needed.
-   - Run `MalshinonDB/malshinon_db.sql` to create and initialize `malshinon_db`.
-
-3. **Build and Run the Application**  
-   - Open the solution in Visual Studio or another C# IDE.
-   - Build and run the application from the `MalshinonApp` folder.
