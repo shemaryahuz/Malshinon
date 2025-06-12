@@ -14,9 +14,11 @@ namespace MalshinonApp.UI
     {
         private ManagerService _service;
         private static ManagerMenu _instance;
+        private string _exit;
         private ManagerMenu(DatabaseContext database)
         {
             _service = ManagerService.GetManagerService(database);
+            _exit = "0";
         } 
         public static ManagerMenu GetManagerMenu(DatabaseContext database)
         {
@@ -33,10 +35,24 @@ namespace MalshinonApp.UI
             {
                 Console.WriteLine(
                     $"Person ID: {person.Id}. " +
-                    $"Persone Role: {person.Role}. " +
+                    $"Person Role: {person.Role}. " +
                     $"First name: {person.FirstName}. " +
                     $"Last name: {person.LastName}. " +
                     $"Secret Code: {person.SecretCode}."
+                    );
+            }
+        }
+        private void ShowReports()
+        {
+            List<Report> reports = _service.GetReports();
+            foreach (Report report in reports)
+            {
+                Console.WriteLine(
+                    $"Reporter ID: {report.ReporterId}. " +
+                    $"Target ID: {report.TargetId}.\n" +
+                    $"Text:\n" +
+                    $"{report.Text}" +
+                    $"Time: {report.Time}"
                     );
             }
         }
@@ -44,17 +60,18 @@ namespace MalshinonApp.UI
         {
             Console.WriteLine(
                 $"Options:\n" +
+                $"0. Exit.\n" +
                 $"1. Show all people.\n" +
-                $"2. Show potential agents\n" +
-                $"3. Show dangerous targets\n" +
-                $"4. Exit.\n" +
+                $"2. Show all reports.\n" +
+                $"3. Show potential agents (reporters or both - reporter and target, that reported more than 10 reports with average of 100 characters).\n" +
+                $"4. Show dangerous targets (targets or both - reporter and target, that have more than 20 reports about them.\n" +
                 $"Select:"
                 );
             return Console.ReadLine();
         }
         private bool Validate(string choice)
         {
-            string[] validated = { "1", "2", "3" };
+            string[] validated = { "1", "2", "3", "4" };
             return validated.Contains(choice);
         }
         private void ExecuteChoice(string choice)
@@ -65,16 +82,19 @@ namespace MalshinonApp.UI
                     ShowPeople();
                     break;
                 case "2":
-                    Console.WriteLine("Not ready yet.");
+                    ShowReports();
                     break;
                 case "3":
-                    Console.WriteLine("Not ready yet.");
+                    Console.WriteLine("Potential agents not ready yet.");
+                    break;
+                case "4":
+                    Console.WriteLine("Dangerous targets not ready yet.");
                     break;
             }
         }
         public void Show()
         {
-            string exit = "4";
+            string exit = _exit;
             bool toExit = false;
             while (!toExit)
             {

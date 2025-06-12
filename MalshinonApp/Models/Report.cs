@@ -12,6 +12,7 @@ namespace MalshinonApp.Models
         public int ReporterId { get; set; }
         public int TargetId { get; set; }
         public string Text { get; set; }
+        public DateTime Time { get; set; }
         public Report(int reporterId, int targetId, string text)
         {
             this.ReporterId = reporterId;

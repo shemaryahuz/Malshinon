@@ -31,5 +31,9 @@ namespace MalshinonApp.Services
         {
             return _personRepo.GetPeople();
         }
+        public List<Report> GetReports()
+        {
+            return _reportRepo.GetReports();
+        }
     }
 }

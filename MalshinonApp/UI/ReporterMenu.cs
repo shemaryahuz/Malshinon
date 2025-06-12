@@ -12,11 +12,15 @@ namespace MalshinonApp.UI
     // This class is responsible for the reporter's menu
     internal class ReporterMenu
     {
-        private ReportService _service;
+        private ReportService _reportService;
+        private LoginService _loginService;
         private static ReporterMenu _instanc;
+        private string _exit;
         private ReporterMenu(DatabaseContext database)
         {
-            _service = ReportService.GetReportService(database);
+            _reportService = ReportService.GetReportService(database);
+            _loginService = LoginService.GetLoginService();
+            _exit = "0";
         }
         public static ReporterMenu GetReporterMenu(DatabaseContext database)
         {
@@ -30,8 +34,8 @@ namespace MalshinonApp.UI
         {
             Console.WriteLine(
                 $"Options:\n" +
+                $"0. Exit.\n" +
                 $"1. Submit report.\n" +
-                $"2. Exit.\n" +
                 $"Select:"
                 );
             return Console.ReadLine();
@@ -40,42 +44,48 @@ namespace MalshinonApp.UI
         {
             return choice == "1";
         }
-        private string GetText()
-        {
-            Console.WriteLine("Enter your report's text:");
-            string text = Console.ReadLine();
-            return text;
-        }
         private void SubmitReport(Reporter reporter)
         {
             try
             {
                 // Get Target name
                 Console.WriteLine("Enter target's first name:");
-                string targetFirstName = Console.ReadLine().ToLower();
+                string targetFirstName = Console.ReadLine();
                 Console.WriteLine("Enter target's last name:");
-                string targetLastName = Console.ReadLine().ToLower();
+                string targetLastName = Console.ReadLine();
                 // Get Report text
-                string text = GetText();
-                Target target = new Target(new Person(targetFirstName, targetLastName, "8", "target")); // to fix secret code
-                bool submited = _service.Report(reporter, target, text);
+                Console.WriteLine("Enter your report's text:");
+                string text = Console.ReadLine();
+                // Check if exists
+                Person? person = _loginService.CheckIfExists(targetFirstName, targetLastName);
+                if (person is null)
+                {
+                    person = new Person(targetFirstName, targetLastName, _loginService.GetNewCode(), "target");
+                }
+                else if (person.Role == "reporter")
+                {
+                    person.Role = "both";
+                }
+                // Create target
+                Target target = new Target(person); // to fix secret code
+                bool submited = _reportService.Report(reporter, target, text);
                 if (submited)
                 {
                     Console.WriteLine("Your report was sended successfuly!");
                 }
                 else
                 {
-                    Console.WriteLine("Somthing went wrong.");
+                    Console.WriteLine("Something went wrong.");
                 }
             }
             catch(Exception ex)
             {
-                Console.WriteLine(ex);
+                Console.WriteLine(ex.Message);
             }
         }
         public void Show(Reporter reporter)
         {
-            string exit = "2";
+            string exit = _exit;
             bool toExit = false;
             while (!toExit)
             {
